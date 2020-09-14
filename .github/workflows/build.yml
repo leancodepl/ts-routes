@@ -1,0 +1,17 @@
+name: ts-routes CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm i
+      - name: Run tests
+        run: npm test
+      - name: Build
+        run: npm run build
