@@ -2,8 +2,8 @@ import PathPattern, {
   PathOptionalParams,
   PathOptionalQuery,
   PathRequiredParams,
-  PathRequiredQuery,
-} from 'PathPattern';
+  PathRequiredQuery
+} from './PathPattern';
 
 export default interface RouteDescription<
   TRequiredParams extends string = string,

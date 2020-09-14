@@ -1,4 +1,4 @@
-import { SegmentOptionalParam, SegmentRequiredParam } from "segment";
+import { SegmentOptionalParam, SegmentRequiredParam } from "../segment";
 
 export default function arg<TParam extends string, TOptional extends boolean = false>(
     name: TParam,

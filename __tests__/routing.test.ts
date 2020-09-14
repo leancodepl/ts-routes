@@ -1,4 +1,4 @@
-import { createRouting, segment, number } from 'index';
+import { createRouting, number, segment } from '../src/index';
 
 describe('routing', () => {
   it('should create routing', () => {

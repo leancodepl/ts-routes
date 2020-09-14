@@ -9,6 +9,12 @@
     "test": "jest",
     "build": "rollup -c"
   },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leancodepl/ts-routes.git"

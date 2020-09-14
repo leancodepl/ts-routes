@@ -1,4 +1,4 @@
-import PathPattern from "PathPattern";
+import PathPattern from "./PathPattern";
 
 export type SegmentRequiredParam<TParam extends string> = {
     name: TParam;

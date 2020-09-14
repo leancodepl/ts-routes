@@ -1,6 +1,6 @@
 import { compile } from "path-to-regexp";
 import { stringify } from "query-string";
-import RouteDescription, { RouteChildren, RouteOptionalParams, RouteOptionalQuery, RouteRequiredParams, RouteRequiredQuery } from "RouteDescription";
+import RouteDescription, { RouteChildren, RouteOptionalParams, RouteOptionalQuery, RouteRequiredParams, RouteRequiredQuery } from "./RouteDescription";
 
 type PathPatternArgs<
     TRequiredParams extends string,

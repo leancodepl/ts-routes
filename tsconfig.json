@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "target": "ES2019",
+    "target": "ESNext",
     "module": "esNext",
     "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
     "strict": true,
-    "baseUrl": "src",
+    "rootDir": "src",
     "esModuleInterop": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
