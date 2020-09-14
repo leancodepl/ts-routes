@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["esnext"],
-    "target": "ESNext",
+    "target": "ES2019",
     "module": "esNext",
     "moduleResolution": "node",
     "sourceMap": true,
