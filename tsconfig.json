@@ -7,8 +7,9 @@
     "sourceMap": true,
     "declaration": true,
     "strict": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "esModuleInterop": true
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["node_modules"]
 }
