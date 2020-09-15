@@ -59,7 +59,7 @@ segment:
 segment`/users/${arg("userId")}`;
 ```
 
-This will enable you to create paths like `users/1` or `users/username`.
+This will enable you to create paths like `/users/1` or `/users/username`.
 
 By default route parameters are treated as required. You can make them optional by providing extra configuration. It is
 also possible to limit possible parameter values by passing a regex string. While trying to create a route which doesn't
