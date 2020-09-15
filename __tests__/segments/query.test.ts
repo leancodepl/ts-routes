@@ -1,4 +1,4 @@
-import { createRouting, query, segment } from "../../src";
+import { createRouting, number, query, segment } from "../../src";
 
 describe("query segment", () => {
     it("creates route with an optional query param", () => {
@@ -32,5 +32,22 @@ describe("query segment", () => {
         const route = routes.product({}, { productId: "2", details: "false" });
 
         expect(route).toEqual(`/product?details=false&productId=2`);
+    });
+
+    it("adds query params at the end of the path in case of nested routes", () => {
+        const routes = createRouting({
+            product: {
+                ...segment`/product${query({
+                    filter: true,
+                })}`,
+                children: {
+                    details: segment`/${number("productId")}`,
+                },
+            },
+        } as const);
+
+        const route = routes.product.details({ productId: "1" }, { filter: "value" });
+
+        expect(route).toEqual(`/product/1?filter=value`);
     });
 });
