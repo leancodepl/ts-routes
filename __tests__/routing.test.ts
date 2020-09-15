@@ -1,20 +1,47 @@
 import { createRouting, number, segment } from '../src/index';
 
-describe('routing', () => {
-  it('should create routing', () => {
+describe('createRouting', () => {
+  it('creates a simple route', () => {
     const routes = createRouting({
-      company: segment`/companies/${number('companyId')}`,
-      contact: segment`/contacts/${number('contactId')}`,
-      insight: segment`/insight/${number('insightId')}`,
-      admin: {
-        ...segment`/admin`,
-        children: {
-          users: segment`/users`,
-        },
-      },
-      onetime: segment`/onetime`,
+      products: segment`/products`,
     } as const);
 
-    routes.company({ companyId: '20' });
+    const route = routes.products();
+
+    expect(route).toEqual('/products');
+  });
+
+  it('creates nested routes', () => {
+    const routes = createRouting({
+      products: {
+        ...segment`/products`,
+        children: {
+          create: segment`/create`,
+        },
+      },
+    } as const);
+
+    const mainRoute = routes.products();
+    const nestedRoute = routes.products.create();
+
+    expect(mainRoute).toEqual('/products');
+    expect(nestedRoute).toEqual('/products/create');
+  });
+
+  it('creates nested routes with params', () => {
+    const routes = createRouting({
+      products: {
+        ...segment`/products/${number('productId')}`,
+        children: {
+          edit: segment`/edit`,
+        },
+      },
+    } as const);
+
+    const mainRoute = routes.products({ productId: '2' });
+    const nestedRoute = routes.products.edit({ productId: '2' });
+
+    expect(mainRoute).toEqual('/products/2');
+    expect(nestedRoute).toEqual('/products/2/edit');
   });
 });
