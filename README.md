@@ -46,11 +46,9 @@ object defining segments. Segments represent single routing paths and are implem
 
 ```js
 const routes = createRouting({
-    users: `/users`
+    users: segment`/users`
 } as const);
 ```
-
-### Segments
 
 ### Parameters
 
@@ -110,6 +108,8 @@ routes.products(
     },
 );
 ```
+
+which will return `/product?details=false&productId=10`.
 
 ### Nested routes
 
