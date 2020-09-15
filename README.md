@@ -67,7 +67,7 @@ satisfy the pattern, an exception will be thrown.
 
 ```js
 segment`/users/${arg("userId", {
-    optional: false,
+    optional: true,
     pattern: "[0-9]",
 })}`;
 ```
