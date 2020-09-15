@@ -1,23 +1,23 @@
-name: ts-routes CI
+name: build
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
+    push:
+        branches:
+            - master
+    pull_request:
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+    build:
+        name: Build
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: npm ci
-      - name: Run ESLint
-        run: npm run lint
-      - name: Run tests
-        run: npm test
-      - name: Build
-        run: npm run build
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install modules
+              run: npm ci
+            - name: Run ESLint
+              run: npm run lint
+            - name: Run tests
+              run: npm test
+            - name: Build
+              run: npm run build
