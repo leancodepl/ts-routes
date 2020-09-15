@@ -38,4 +38,15 @@ describe("uuid segment", () => {
 
         expect(() => routes.product({ productId: "3d368832-0bc-4fcc-bf75-5bd8794c1ad3" })).toThrow();
     });
+
+    it("returns correct pattern", () => {
+        const uuidPattern = "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}";
+        const routes = createRouting({
+            product: segment`/product/${uuid("productId")}`,
+        } as const);
+
+        const pattern = routes.product.pattern;
+
+        expect(pattern).toEqual(`/product/:productId(${uuidPattern})`);
+    });
 });

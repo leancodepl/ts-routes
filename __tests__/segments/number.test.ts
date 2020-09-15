@@ -28,4 +28,24 @@ describe("number segment", () => {
 
         expect(() => routes.product({ productId: "aaa" })).toThrow();
     });
+
+    it("returns the correct pattern when required", () => {
+        const routes = createRouting({
+            product: segment`/product/${number("productId")}`,
+        } as const);
+
+        const pattern = routes.product.pattern;
+
+        expect(pattern).toEqual("/product/:productId([0-9]+)");
+    });
+
+    it("returns the correct pattern when optional", () => {
+        const routes = createRouting({
+            product: segment`/product/${number("productId", true)}`,
+        } as const);
+
+        const pattern = routes.product.pattern;
+
+        expect(pattern).toEqual("/product/:productId([0-9]+)?");
+    });
 });

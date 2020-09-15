@@ -50,4 +50,14 @@ describe("query segment", () => {
 
         expect(route).toEqual(`/product/1?filter=value`);
     });
+
+    it("ignores query params in the pattern", () => {
+        const routes = createRouting({
+            product: segment`/product${query({ productId: true })}`,
+        } as const);
+
+        const pattern = routes.product.pattern;
+
+        expect(pattern).toEqual("/product");
+    });
 });

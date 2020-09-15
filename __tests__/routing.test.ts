@@ -11,6 +11,16 @@ describe("createRouting", () => {
         expect(route).toEqual("/products");
     });
 
+    it("returns correct pattern for a simple route", () => {
+        const routes = createRouting({
+            products: segment`/products`,
+        } as const);
+
+        const pattern = routes.products.pattern;
+
+        expect(pattern).toEqual("/products");
+    });
+
     it("creates nested routes", () => {
         const routes = createRouting({
             products: {
@@ -28,7 +38,7 @@ describe("createRouting", () => {
         expect(nestedRoute).toEqual("/products/create");
     });
 
-    it("creates nested routes with params", () => {
+    describe("nested routes", () => {
         const routes = createRouting({
             products: {
                 ...segment`/products/${number("productId")}`,
@@ -38,10 +48,20 @@ describe("createRouting", () => {
             },
         } as const);
 
-        const mainRoute = routes.products({ productId: "2" });
-        const nestedRoute = routes.products.edit({ productId: "2" });
+        it("creates nested routes with params", () => {
+            const mainRoute = routes.products({ productId: "2" });
+            const nestedRoute = routes.products.edit({ productId: "2" });
 
-        expect(mainRoute).toEqual("/products/2");
-        expect(nestedRoute).toEqual("/products/2/edit");
+            expect(mainRoute).toEqual("/products/2");
+            expect(nestedRoute).toEqual("/products/2/edit");
+        });
+
+        it("returns correct patterns", () => {
+            const mainPattern = routes.products.pattern;
+            const nestedPattern = routes.products.edit.pattern;
+
+            expect(mainPattern).toEqual("/products/:productId([0-9]+)");
+            expect(nestedPattern).toEqual("/products/:productId([0-9]+)/edit");
+        });
     });
 });

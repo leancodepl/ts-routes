@@ -32,9 +32,16 @@ const routes = createRouting({
 } as const);
 
 routes.products(); // '/products'
+routes.products.pattern // '/products'
+
 routes.users({ userId: '10' }) // '/users/10'
+routes.users.pattern // '/users/:userId([0-9]+)
+
 routes.items({}, { filter: 'new' }) // '/items?filter=new'
+routes.items.pattern // '/items'
+
 routes.items.item({ itemId: '12d66718-e47c-4a2a-ad5b-8897def2f6a7' }) // '/items/12d66718-e47c-4a2a-ad5b-8897def2f6a7'
+routes.items.item.pattern // `/items/:itemId(${uuidRegex})`
 ```
 
 ## Usage
@@ -86,7 +93,7 @@ There are some predefined convenience parameter types provided:
 ### Query string
 
 Query string parameters can be specified by interpolating `query` function inside a segment string. The `query` function
-expects an object where keys are names of parameters and values specify whether those params are required in a path.
+expects an object where keys are names of parameters and values specify whether those params are required in the path.
 
 ```js
 segment`/product${query({
@@ -95,9 +102,9 @@ segment`/product${query({
 })}`;
 ```
 
-The above segment defines a path which expects a `productId` URL param and an optional `details` URL param.
+The above segment defines a path which expects the `productId` URL param and the optional `details` URL param.
 
-When creating a route query strings can be passed in a second argument:
+When creating a route query strings can be passed in the second argument:
 
 ```js
 routes.products(
@@ -110,6 +117,36 @@ routes.products(
 ```
 
 which will return `/product?details=false&productId=10`.
+
+### Patterns
+
+While creating a routing, alongside path string generators, patterns for those paths compatible with
+[path-to-regexp](https://github.com/pillarjs/path-to-regexp) are generated. You can access them via the `pattern`
+property:
+
+```
+routes.products.pattern
+```
+
+Those patterns are useful for integration with routing libraries which support
+[path-to-regexp](https://github.com/pillarjs/path-to-regexp)-style syntax e.g. in case of React Router DOM:
+
+```jsx
+<Route exact component={ProductsPage} path={routes.products.pattern} />
+```
+
+and in case of Vue Router:
+
+```js
+const router = new VueRouter({
+    routes: [
+        {
+            path: routes.products.pattern,
+            component: ProductsPage,
+        },
+    ],
+});
+```
 
 ### Nested routes
 
