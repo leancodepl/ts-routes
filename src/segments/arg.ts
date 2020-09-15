@@ -3,7 +3,7 @@ import { SegmentOptionalParam, SegmentRequiredParam } from "../segment";
 export default function arg<TParam extends string, TOptional extends boolean = false>(
     name: TParam,
     options?: {
-        optional?: TOptional,
+        optional?: TOptional;
         pattern?: string;
     },
 ): TOptional extends true ? SegmentOptionalParam<TParam> : SegmentRequiredParam<TParam> {

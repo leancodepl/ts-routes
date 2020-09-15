@@ -1,6 +1,12 @@
 import { compile } from "path-to-regexp";
 import { stringify } from "query-string";
-import RouteDescription, { RouteChildren, RouteOptionalParams, RouteOptionalQuery, RouteRequiredParams, RouteRequiredQuery } from "./RouteDescription";
+import RouteDescription, {
+    RouteChildren,
+    RouteOptionalParams,
+    RouteOptionalQuery,
+    RouteRequiredParams,
+    RouteRequiredQuery,
+} from "./RouteDescription";
 
 type PathPatternArgs<
     TRequiredParams extends string,
@@ -27,13 +33,13 @@ type PathPatternArgs<
 type AddParams<
     TSourceRouteDescription extends RouteDescription,
     TDestRouteDescription extends RouteDescription
-    > = RouteDescription<
-        RouteRequiredParams<TSourceRouteDescription> | RouteRequiredParams<TDestRouteDescription>,
-        RouteOptionalParams<TSourceRouteDescription> | RouteOptionalParams<TDestRouteDescription>,
-        RouteRequiredQuery<TSourceRouteDescription> | RouteRequiredQuery<TDestRouteDescription>,
-        RouteOptionalQuery<TSourceRouteDescription> | RouteOptionalQuery<TDestRouteDescription>,
-        RouteChildren<TSourceRouteDescription>
-    >;
+> = RouteDescription<
+    RouteRequiredParams<TSourceRouteDescription> | RouteRequiredParams<TDestRouteDescription>,
+    RouteOptionalParams<TSourceRouteDescription> | RouteOptionalParams<TDestRouteDescription>,
+    RouteRequiredQuery<TSourceRouteDescription> | RouteRequiredQuery<TDestRouteDescription>,
+    RouteOptionalQuery<TSourceRouteDescription> | RouteOptionalQuery<TDestRouteDescription>,
+    RouteChildren<TSourceRouteDescription>
+>;
 
 type MapToRoute<TRouteDescription extends RouteDescription> = {
     (
@@ -49,17 +55,17 @@ type MapToRoute<TRouteDescription extends RouteDescription> = {
     [TKey in keyof RouteChildren<TRouteDescription>]: MapToRoute<
         AddParams<RouteChildren<TRouteDescription>[TKey], TRouteDescription>
     >;
-    };
+};
 
-export default function createRouting<
-    TRoutes extends { readonly [name: string]: RouteDescription }
->(routes: TRoutes): { readonly [TKey in keyof TRoutes]: MapToRoute<TRoutes[TKey]> } {
+export default function createRouting<TRoutes extends { readonly [name: string]: RouteDescription }>(
+    routes: TRoutes,
+): { readonly [TKey in keyof TRoutes]: MapToRoute<TRoutes[TKey]> } {
     function createRoute(currentPattern: string, currentRoute: RouteDescription<string, string, string, string, any>) {
         const pattern = currentPattern + currentRoute.pattern.pattern;
         const compiledPattern = compile(pattern);
 
         function route(params: Record<string, string> | undefined, queryParams: Record<string, string> | undefined) {
-            const queryString = queryParams ? `?${stringify(queryParams)}` : ""
+            const queryString = queryParams ? `?${stringify(queryParams)}` : "";
             return compiledPattern(params) + queryString;
         }
 
