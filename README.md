@@ -72,7 +72,7 @@ segment`/users/${arg("userId", {
 })}`;
 ```
 
-When creating a route query strings can be passed in a first argument:
+When creating a route, path parameters can be passed in the first argument:
 
 ```js
 routes.users({ userId: "10" });
