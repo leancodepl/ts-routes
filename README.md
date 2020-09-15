@@ -48,7 +48,7 @@ routes.items.item.pattern // `/items/:itemId(${uuidRegex})`
 
 ### Routing
 
-To use stronly typed paths, you first have to create the routing object by calling `createRouting` and providing an
+To use strongly typed paths, you first have to create the routing object by calling `createRouting` and providing an
 object defining segments. Segments represent single routing paths and are implemented as tagged template literals:
 
 ```js
@@ -129,13 +129,15 @@ routes.products.pattern
 ```
 
 Those patterns are useful for integration with routing libraries which support
-[path-to-regexp](https://github.com/pillarjs/path-to-regexp)-style syntax e.g. in case of React Router DOM:
+[path-to-regexp](https://github.com/pillarjs/path-to-regexp)-style syntax.
+
+#### React Router DOM
 
 ```jsx
 <Route exact component={ProductsPage} path={routes.products.pattern} />
 ```
 
-and in case of Vue Router:
+#### Vue Router
 
 ```js
 const router = new VueRouter({
