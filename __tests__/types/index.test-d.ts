@@ -13,6 +13,9 @@ const routes = createRouting({
     order: segment`/orders/${number("orderId", true)}`,
 } as const);
 
+// Should not allow creating routing from raw strings
+expectError(createRouting({ login: "/login" }));
+
 // Passes without arguments when there are no required parameters or query parameters
 expectType<string>(routes.login());
 
