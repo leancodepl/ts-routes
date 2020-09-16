@@ -1,6 +1,6 @@
 # ts-routes
 
-![npm](https://img.shields.io/npm/v/ts-routes)
+[![npm](https://img.shields.io/npm/v/ts-routes)](https://www.npmjs.com/package/ts-routes)
 [![Actions Status](https://github.com/leancodepl/ts-routes/workflows/build/badge.svg)](https://github.com/leancodepl/ts-routes/actions)
 
 Helper library for constructing strongly typed parameterized routing paths. It prevents you from passing hardcoded
