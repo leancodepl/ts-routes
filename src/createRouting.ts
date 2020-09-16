@@ -18,7 +18,7 @@ type PathPatternArgs<
 > = [TRequiredParams] extends [never]
     ? [TRequiredQuery] extends [never]
         ? [TOptionalParams] extends [never]
-            ? [EmptyObject, Partial<Record<TOptionalQuery, string>>?]
+            ? [EmptyObject?, Partial<Record<TOptionalQuery, string>>?]
             : [Partial<Record<TOptionalParams, string>>?]
         : [TOptionalParams] extends [never]
         ? [EmptyObject, Record<TRequiredQuery, string> & Partial<Record<TOptionalQuery, string>>]

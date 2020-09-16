@@ -2,6 +2,7 @@ import { createRouting, number, segment, query } from "../../lib/index";
 import { expectError, expectType } from "tsd";
 
 const routes = createRouting({
+    login: segment`/login`,
     user: segment`/users/${number("userId")}`,
     products: {
         ...segment`/products${query({ filter: true, optionalFilter: false })}`,
@@ -11,6 +12,9 @@ const routes = createRouting({
     },
     order: segment`/orders/${number("orderId", true)}`,
 } as const);
+
+// Passes without arguments when there are no required parameters or query parameters
+expectType<string>(routes.login());
 
 // Passes when the required param is specified
 expectType<string>(routes.user({ userId: "12" }));
