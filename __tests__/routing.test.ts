@@ -1,4 +1,4 @@
-import { createRouting, number, segment } from "../src/index";
+import { createRouting, number, QueryParamsFor, segment } from "../src/index";
 
 describe("createRouting", () => {
     it("creates a simple route", () => {

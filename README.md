@@ -118,38 +118,6 @@ routes.products(
 
 which will return `/product?details=false&productId=10`.
 
-### Patterns
-
-While creating a routing, alongside path string generators, patterns for those paths compatible with
-[path-to-regexp](https://github.com/pillarjs/path-to-regexp) are generated. You can access them via the `pattern`
-property:
-
-```
-routes.products.pattern
-```
-
-Those patterns are useful for integration with routing libraries which support
-[path-to-regexp](https://github.com/pillarjs/path-to-regexp)-style syntax.
-
-#### React Router DOM
-
-```jsx
-<Route exact component={ProductsPage} path={routes.products.pattern} />
-```
-
-#### Vue Router
-
-```js
-const router = new VueRouter({
-    routes: [
-        {
-            path: routes.products.pattern,
-            component: ProductsPage,
-        },
-    ],
-});
-```
-
 ### Nested routes
 
 Routes can be nested by providing an optional `children` property to segments:
@@ -170,3 +138,84 @@ Child routes are attached to the parent route object so that to construct a chil
 
 Routes can be deeply nested and child routes will include all required and optional route parameters and query string
 parameters from parent routes.
+
+### Patterns
+
+While creating a routing, alongside path string generators, patterns for those paths compatible with
+[path-to-regexp](https://github.com/pillarjs/path-to-regexp) are generated. You can access them via the `pattern`
+property:
+
+```
+routes.products.pattern
+```
+
+Those patterns are useful for integration with routing libraries which support
+[path-to-regexp](https://github.com/pillarjs/path-to-regexp)-style syntax (e.g. React Router DOM, Vue Router).
+
+### React Router DOM
+
+You can use patterns for defining routes:
+
+```jsx
+<Route exact component={ProductsPage} path={routes.products.pattern} />
+```
+
+With React it's also useful to add some helper types which can be used for typing routing props for components:
+
+```ts
+import { FunctionComponent } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { RouteParamsFor } from "ts-routes";
+
+type PageProps<TPathParams extends (...args: any[]) => string> = RouteComponentProps<RouteParamsFor<TPathParams>>;
+
+type PageComponent<TPathParams extends (...args: any[]) => string> = FunctionComponent<PageProps<TPathParams>>;
+```
+
+Which you can then use like so:
+
+```tsx
+type ProductsPageProps = PageProps<typeof routes.products>;
+
+const ProductPage: PageComponent<typeof routes.products> = ({
+    match: {
+    params: { productId },
+}) => (
+    <div>{productId}</div>
+);
+```
+
+And for query string params:
+
+```ts
+import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
+import { QueryParamsFor } from "ts-routes";
+
+function useQueryParams() {
+    const location = useLocation();
+    return useMemo(() => new URLSearchParams(location.search), [location.search]);
+    return params;
+}
+
+function useQueryParamsGuarded<T extends (...args: any) => any>() {
+    return useQueryParams() as URLSearchParams & { get(name: keyof NonNullable<QueryParamsFor<T>>): string | null };
+}
+
+const redirectUrl = useQueryParamsGuarded<typeof routes.login>().get("redirect");
+```
+
+### Vue Router
+
+You can use patterns for defining routes:
+
+```js
+const router = new VueRouter({
+    routes: [
+        {
+            path: routes.products.pattern,
+            component: ProductsPage,
+        },
+    ],
+});
+```

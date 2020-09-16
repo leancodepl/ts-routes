@@ -7,6 +7,8 @@ export {
     SegmentOptionalQuery,
     SegmentRequiredParam,
     SegmentRequiredQuery,
+    RouteParamsFor,
+    QueryParamsFor,
 } from "./segment";
 export { default as arg } from "./segments/arg";
 export { default as number } from "./segments/number";

@@ -22,6 +22,12 @@ export type SegmentOptionalQuery<TParam extends string> = {
     type: "optional-query";
 };
 
+export type RouteParamsFor<T extends (...args: any[]) => string> = Parameters<T>[0] extends undefined
+    ? {}
+    : NonNullable<Parameters<T>[0]>;
+
+export type QueryParamsFor<T extends (...args: any[]) => string> = Parameters<T>[1];
+
 export default function segment<
     TRequiredParam extends string = never,
     TOptionalParam extends string = never,
