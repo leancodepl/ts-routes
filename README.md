@@ -179,10 +179,9 @@ type ProductsPageProps = PageProps<typeof routes.products>;
 
 const ProductPage: PageComponent<typeof routes.products> = ({
     match: {
-    params: { productId },
-}) => (
-    <div>{productId}</div>
-);
+        params: { productId },
+    },
+}) => <div>{productId}</div>;
 ```
 
 And for query string params:
