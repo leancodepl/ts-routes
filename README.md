@@ -195,7 +195,6 @@ import { QueryParamsFor } from "ts-routes";
 function useQueryParams() {
     const location = useLocation();
     return useMemo(() => new URLSearchParams(location.search), [location.search]);
-    return params;
 }
 
 function useQueryParamsGuarded<T extends (...args: any) => any>() {
