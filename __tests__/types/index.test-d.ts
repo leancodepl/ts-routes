@@ -16,6 +16,9 @@ const routes = createRouting({
 // Passes without arguments when there are no required parameters or query parameters
 expectType<string>(routes.login());
 
+// Does not allow undefined query params in single paths
+expectError(routes.login({}, { a: "a" }));
+
 // Passes when the required param is specified
 expectType<string>(routes.user({ userId: "12" }));
 
