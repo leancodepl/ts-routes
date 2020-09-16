@@ -8,6 +8,8 @@ import RouteDescription, {
     RouteRequiredQuery,
 } from "./RouteDescription";
 
+type EmptyObject = Record<any, never>;
+
 type PathPatternArgs<
     TRequiredParams extends string,
     TOptionalParams extends string,
@@ -15,16 +17,22 @@ type PathPatternArgs<
     TOptionalQuery extends string
 > = [TRequiredParams] extends [never]
     ? [TRequiredQuery] extends [never]
-        ? [Partial<Record<TOptionalParams, string>>?, Partial<Record<TOptionalQuery, string>>?]
+        ? [TOptionalParams] extends [never]
+            ? [EmptyObject, Partial<Record<TOptionalQuery, string>>?]
+            : [Partial<Record<TOptionalParams, string>>?]
+        : [TOptionalParams] extends [never]
+        ? [EmptyObject, Record<TRequiredQuery, string> & Partial<Record<TOptionalQuery, string>>]
         : [
               Partial<Record<TOptionalParams, string>>,
               Record<TRequiredQuery, string> & Partial<Record<TOptionalQuery, string>>,
           ]
     : [TRequiredQuery] extends [never]
-    ? [
-          Record<TRequiredParams, string> & Partial<Record<TOptionalParams, string>>,
-          Partial<Record<TOptionalQuery, string>>?,
-      ]
+    ? [TOptionalQuery] extends [never]
+        ? [Record<TRequiredParams, string> & Partial<Record<TOptionalParams, string>>]
+        : [
+              Record<TRequiredParams, string> & Partial<Record<TOptionalParams, string>>,
+              Partial<Record<TOptionalQuery, string>>?,
+          ]
     : [
           Record<TRequiredParams, string> & Partial<Record<TOptionalParams, string>>,
           Record<TRequiredQuery, string> & Partial<Record<TOptionalQuery, string>>,

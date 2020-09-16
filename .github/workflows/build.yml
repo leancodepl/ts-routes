@@ -19,5 +19,7 @@ jobs:
               run: npm run lint
             - name: Run tests
               run: npm test
+            - name: Test types
+              run: npm run test:types
             - name: Build
               run: npm run build
