@@ -1,3 +1,4 @@
+import { URLSearchParams } from "url";
 import { createRouting, number, query, segment } from "../../src";
 
 describe("query segment", () => {
@@ -21,7 +22,7 @@ describe("query segment", () => {
         expect(route).toEqual("/product?productId=2");
     });
 
-    it("creates route with multiple query params and they are sorted in alphabetical order", () => {
+    it("creates route with multiple query params", () => {
         const routes = createRouting({
             product: segment`/product${query({
                 productId: true,
@@ -31,7 +32,12 @@ describe("query segment", () => {
 
         const route = routes.product({}, { productId: "2", details: "false" });
 
-        expect(route).toEqual(`/product?details=false&productId=2`);
+        expect(route.startsWith(`/product?`));
+
+        const searchParams = new URLSearchParams(route.split("?")[1]);
+        expect(Array.from(searchParams.keys()).length).toEqual(2);
+        expect(searchParams.get("details")).toEqual("false");
+        expect(searchParams.get("productId")).toEqual("2");
     });
 
     it("adds query params at the end of the path in case of nested routes", () => {
