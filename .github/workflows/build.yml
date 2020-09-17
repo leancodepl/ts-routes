@@ -1,0 +1,25 @@
+name: build
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install modules
+              run: npm ci
+            - name: Run ESLint
+              run: npm run lint
+            - name: Run tests
+              run: npm test
+            - name: Test types
+              run: npm run test:types
+            - name: Build
+              run: npm run build
