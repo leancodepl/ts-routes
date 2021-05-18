@@ -18,7 +18,7 @@ yarn add ts-routes
 ## Quick start
 
 ```js
-import { createRouting, number, query, uuid } from 'ts-routes';
+import { createRouting, number, query, segment, uuid } from 'ts-routes';
 
 const routes = createRouting({
     products: segment`/products`,
