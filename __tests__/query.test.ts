@@ -7,7 +7,7 @@ describe("query", () => {
             product: {
                 ...segment`/product`,
                 query: {
-                    productId: query(true),
+                    productId: query("optional"),
                 },
             },
         } as const);
@@ -22,7 +22,7 @@ describe("query", () => {
             product: {
                 ...segment`/product`,
                 query: {
-                    productId: query(false),
+                    productId: query("required"),
                 },
             },
         } as const);
@@ -37,8 +37,8 @@ describe("query", () => {
             product: {
                 ...segment`/product`,
                 query: {
-                    productId: query(false),
-                    details: query(true),
+                    productId: query("required"),
+                    details: query("optional"),
                 },
             },
         } as const);
@@ -58,7 +58,7 @@ describe("query", () => {
             product: {
                 ...segment`/product`,
                 query: {
-                    filter: query(false),
+                    filter: query("required"),
                 },
                 children: {
                     details: segment`/${number("productId")}`,
@@ -76,7 +76,7 @@ describe("query", () => {
             product: {
                 ...segment`/product`,
                 query: {
-                    productId: query(true),
+                    productId: query("optional"),
                 },
             },
         } as const);

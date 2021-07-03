@@ -1,6 +1,6 @@
 {
   "name": "ts-routes",
-  "version": "2.0.0",
+  "version": "2.0.0-alpha.0",
   "description": "Strongly typed routes management",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",

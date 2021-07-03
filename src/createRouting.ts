@@ -1,5 +1,6 @@
 import { compile } from "path-to-regexp";
 import { IParseOptions, IStringifyOptions, parse, stringify } from "qs";
+import { Optionality } from "./helpers";
 import PathParamDescription from "./PathParamDescription";
 import QueryParamDescription from "./QueryParamDescription";
 import RouteDescription from "./RouteDescription";
@@ -53,7 +54,7 @@ type GetQueryParams<TRouteDescription extends RouteDescription<any, any, any>> =
 
 type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;
 
-type MapPathParams<TPathParams extends PathParamDescription<string, boolean>[]> = UnionToIntersection<
+type MapPathParams<TPathParams extends PathParamDescription<string, Optionality>[]> = UnionToIntersection<
     {
         [T in keyof TPathParams]: GetParam<TPathParams[T]>;
     }[number]
@@ -61,22 +62,22 @@ type MapPathParams<TPathParams extends PathParamDescription<string, boolean>[]> 
 
 type SingleOrArray<T> = T | T[];
 
-type MapQueryParams<TQueryParams extends Record<string, QueryParamDescription<any, boolean>>> = {
-    [TName in keyof TQueryParams as TQueryParams[TName] extends QueryParamDescription<any, true>
+type MapQueryParams<TQueryParams extends Record<string, QueryParamDescription<any, Optionality>>> = {
+    [TName in keyof TQueryParams as TQueryParams[TName] extends QueryParamDescription<any, "optional">
         ? TName
         : never]?: SingleOrArray<GetQueryResultType<TQueryParams[TName]>>;
 } &
     {
-        [TName in keyof TQueryParams as TQueryParams[TName] extends QueryParamDescription<any, false>
+        [TName in keyof TQueryParams as TQueryParams[TName] extends QueryParamDescription<any, "required">
             ? TName
             : never]: SingleOrArray<GetQueryResultType<TQueryParams[TName]>>;
     };
 
-type GetQueryResultType<TQueryParam extends QueryParamDescription<any, boolean>> =
-    TQueryParam extends QueryParamDescription<infer TReturnType, boolean> ? TReturnType : never;
+type GetQueryResultType<TQueryParam extends QueryParamDescription<any, Optionality>> =
+    TQueryParam extends QueryParamDescription<infer TReturnType, Optionality> ? TReturnType : never;
 
 type GetParam<TPathParam> = TPathParam extends PathParamDescription<infer TName, infer TOptional>
-    ? TOptional extends true
+    ? TOptional extends "optional"
         ? {
               [T in TName]?: string;
           }

@@ -1,7 +1,8 @@
+import { Optionality } from "./helpers";
 import PathParamDescription from "./PathParamDescription";
 import SegmentPattern from "./SegmentPattern";
 
-export default function segment<TPathParamsDescription extends PathParamDescription<string, boolean>[]>(
+export default function segment<TPathParamsDescription extends PathParamDescription<string, Optionality>[]>(
     literals: TemplateStringsArray,
     ...placeholders: TPathParamsDescription
 ) {

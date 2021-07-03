@@ -1,14 +1,15 @@
+import { Optionality } from "../helpers";
 import PathParamDescription from "../PathParamDescription";
 
-export default function arg<TName extends string = string, TOptional extends boolean = false>(
+export default function arg<TName extends string = string, TOptionality extends Optionality = "required">(
     name: TName,
     {
         pattern,
-        optional = false as TOptional,
+        optionality = "required" as TOptionality,
     }: {
         pattern?: string;
-        optional?: TOptional;
+        optionality?: TOptionality;
     } = {},
 ) {
-    return new PathParamDescription({ name, optional, pattern });
+    return new PathParamDescription({ name, optionality, pattern });
 }

@@ -17,7 +17,7 @@ yarn add ts-routes
 
 ## Quick start
 
-```js
+```ts
 import { createRouting, number, query, segment, uuid } from 'ts-routes';
 
 const routes = createRouting({

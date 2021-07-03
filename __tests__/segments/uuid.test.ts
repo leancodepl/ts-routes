@@ -5,7 +5,7 @@ describe("uuid segment", () => {
 
     it("creates route with an optional uuid param", () => {
         const routes = createRouting({
-            product: segment`/product/${uuid("productId", { optional: true })}`,
+            product: segment`/product/${uuid("productId", "optional")}`,
         } as const);
 
         const route = routes.product();

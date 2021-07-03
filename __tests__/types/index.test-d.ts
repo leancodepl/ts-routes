@@ -7,15 +7,15 @@ const routes = createRouting({
     products: {
         ...segment`/products`,
         query: {
-            filter: query(false),
-            optionalFilter: query(true),
-            object: query<{ test: string }, true>(true),
+            filter: query("required"),
+            optionalFilter: query("optional"),
+            object: query<{ test: string }, "optional">("optional"),
         },
         children: {
             product: segment`/${number("productId")}`,
         },
     },
-    order: segment`/orders/${number("orderId", { optional: true })}`,
+    order: segment`/orders/${number("orderId", "optional")}`,
 });
 
 // Should not allow creating routing from raw strings
