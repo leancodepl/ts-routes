@@ -1,66 +1,20 @@
-import PathPattern from "./PathPattern";
+import PathParamDescription from "./PathParamDescription";
+import SegmentPattern from "./SegmentPattern";
 
-export type SegmentRequiredParam<TParam extends string> = {
-    name: TParam;
-    type: "required-param";
-    segment: string;
-};
-
-export type SegmentOptionalParam<TParam extends string> = {
-    name: TParam;
-    type: "optional-param";
-    segment: string;
-};
-
-export type SegmentRequiredQuery<TParam extends string> = {
-    name: TParam;
-    type: "required-query";
-};
-
-export type SegmentOptionalQuery<TParam extends string> = {
-    name: TParam;
-    type: "optional-query";
-};
-
-export type RouteParamsFor<T extends (...args: any[]) => string> = Parameters<T>[0] extends undefined
-    ? {}
-    : NonNullable<Parameters<T>[0]>;
-
-export type QueryParamsFor<T extends (...args: any[]) => string> = Parameters<T>[1];
-
-export default function segment<
-    TRequiredParam extends string = never,
-    TOptionalParam extends string = never,
-    TRequiredQuery extends string = never,
-    TOptionalQuery extends string = never
->(
+export default function segment<TPathParamsDescription extends PathParamDescription<string, boolean>[]>(
     literals: TemplateStringsArray,
-    ...placeholders: (
-        | SegmentRequiredParam<TRequiredParam>
-        | SegmentOptionalParam<TOptionalParam>
-        | SegmentRequiredQuery<TRequiredQuery>
-        | SegmentOptionalQuery<TOptionalQuery>
-        | Array<
-              | SegmentRequiredParam<TRequiredParam>
-              | SegmentOptionalParam<TOptionalParam>
-              | SegmentRequiredQuery<TRequiredQuery>
-              | SegmentOptionalQuery<TOptionalQuery>
-          >
-    )[]
+    ...placeholders: TPathParamsDescription
 ) {
     let result = "";
 
     for (let i = 0; i < placeholders.length; i++) {
         result += literals[i];
-        const placeholder = placeholders[i];
-        if ("segment" in placeholder) {
-            result += placeholder.segment;
-        }
+        result += placeholders[i].pattern;
     }
 
     result += literals[literals.length - 1];
 
     return {
-        pattern: new PathPattern<TRequiredParam, TOptionalParam, TRequiredQuery, TOptionalQuery>(result),
+        pattern: new SegmentPattern<TPathParamsDescription>(result, placeholders),
     };
 }

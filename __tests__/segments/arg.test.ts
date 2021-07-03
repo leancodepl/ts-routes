@@ -1,9 +1,9 @@
-import { arg, createRouting, segment } from "../../src";
+import { string, createRouting, segment, arg } from "../../src";
 
 describe("arg segment", () => {
     it("creates route with an arg segment", () => {
         const routes = createRouting({
-            product: segment`/product/${arg("productId")}`,
+            product: segment`/product/${string("productId")}`,
         } as const);
 
         const route = routes.product({ productId: "id" });
@@ -13,7 +13,7 @@ describe("arg segment", () => {
 
     it("creates route with an optional arg segment", () => {
         const routes = createRouting({
-            product: segment`/product/${arg("productId", {
+            product: segment`/product/${string("productId", {
                 optional: true,
             })}`,
         } as const);
@@ -47,7 +47,7 @@ describe("arg segment", () => {
 
     it("returns the correct path pattern when required", () => {
         const routes = createRouting({
-            product: segment`/product/${arg("productId")}`,
+            product: segment`/product/${string("productId")}`,
         } as const);
 
         const pattern = routes.product.pattern;
@@ -57,7 +57,7 @@ describe("arg segment", () => {
 
     it("returns the correct path pattern when optional", () => {
         const routes = createRouting({
-            product: segment`/product/${arg("productId", {
+            product: segment`/product/${string("productId", {
                 optional: true,
             })}`,
         } as const);
