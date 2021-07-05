@@ -3,7 +3,7 @@ import { createRouting, number, segment } from "../../src";
 describe("number segment", () => {
     it("creates route with an optional number param", () => {
         const routes = createRouting({
-            product: segment`/product/${number("productId", true)}`,
+            product: segment`/product/${number("productId", "optional")}`,
         } as const);
 
         const route = routes.product();
@@ -41,7 +41,7 @@ describe("number segment", () => {
 
     it("returns the correct pattern when optional", () => {
         const routes = createRouting({
-            product: segment`/product/${number("productId", true)}`,
+            product: segment`/product/${number("productId", "optional")}`,
         } as const);
 
         const pattern = routes.product.pattern;
