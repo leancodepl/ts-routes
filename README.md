@@ -79,7 +79,7 @@ satisfy the pattern, an exception will be thrown.
 
 ```ts
 segment`/users/${arg("userId", {
-    optional: true,
+    optionality: "optional",
     pattern: "[0-9]",
 })}`;
 ```
@@ -92,9 +92,9 @@ routes.users({ userId: "10" });
 
 There are some predefined convenience parameter types provided:
 
--   `string(name: string, { optional?: boolean })` for plain strings
--   `number(name: string, { optional?: boolean })` for number strings
--   `uuid(name: string, { optional?: boolean })` for UUID strings
+-   `string(name: string, optionality?: "optional" | "required" = "required")` for plain strings
+-   `number(name: string, optionality?: "optional" | "required" = "required")` for number strings
+-   `uuid(name: string, optionality?: "optional" | "required" = "required")` for UUID strings
 
 ### Query string
 
@@ -105,8 +105,8 @@ expects an object where keys are names of parameters and values specify whether 
 {
     ...segment`/product`,
     query: {
-        productId: query(false),
-        details: query(true)
+        productId: query("required"),
+        details: query("optional")
     }
 }
 ```
@@ -151,8 +151,8 @@ const routes = createRouting({
     products: {
         ...segment`/product`,
         query: {
-            productId: query(false),
-            details: query<ProductDetails>(true)
+            productId: query("required"),
+            details: query<ProductDetails, "optional">("optional")
         }
     }
 });
