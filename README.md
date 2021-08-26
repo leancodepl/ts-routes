@@ -17,19 +17,22 @@ yarn add ts-routes
 
 ## Quick start
 
-```js
+```ts
 import { createRouting, number, query, segment, uuid } from 'ts-routes';
 
 const routes = createRouting({
     products: segment`/products`,
     users: segment`/users/${number('userId')}`,
     items: {
-        ...segment`/items${query({ filter: false })}`,
+        ...segment`/items`,
+        query: {
+            filter: query()
+        }
         children: {
             item: segment`/${uuid('itemId')}`,
         },
     },
-} as const);
+});
 
 routes.products(); // '/products'
 routes.products.pattern // '/products'
@@ -51,18 +54,20 @@ routes.items.item.pattern // `/items/:itemId(${uuidRegex})`
 To use strongly typed paths, you first have to create the routing object by calling `createRouting` and providing an
 object defining segments. Segments represent single routing paths and are implemented as tagged template literals:
 
-```js
+```ts
 const routes = createRouting({
     users: segment`/users`
-} as const);
+});
 ```
+
+Second parameter to `createRouting` is `qs` configuration. You can extend/alter `ts-routes` functionality by providing configuration to `qs`. For example you can change array formatting and delimiter. For details on configuration please refer to [`qs` documentation](https://github.com/ljharb/qs).
 
 ### Parameters
 
 You can define route params (i.e. parts of the path that are variable) by interpolating the `arg` function inside a
 segment:
 
-```js
+```ts
 segment`/users/${arg("userId")}`;
 ```
 
@@ -72,41 +77,45 @@ By default route parameters are treated as required. You can make them optional 
 also possible to limit possible parameter values by passing a regex string. While trying to create a route which doesn't
 satisfy the pattern, an exception will be thrown.
 
-```js
+```ts
 segment`/users/${arg("userId", {
-    optional: true,
+    optionality: "optional",
     pattern: "[0-9]",
 })}`;
 ```
 
 When creating a route, path parameters can be passed in the first argument:
 
-```js
+```ts
 routes.users({ userId: "10" });
 ```
 
 There are some predefined convenience parameter types provided:
 
--   `number(name: string, optional?: boolean)` for number strings
--   `uuid(name: string, optional?: boolean)` for UUID strings
+-   `string(name: string, optionality?: "optional" | "required" = "required")` for plain strings
+-   `number(name: string, optionality?: "optional" | "required" = "required")` for number strings
+-   `uuid(name: string, optionality?: "optional" | "required" = "required")` for UUID strings
 
 ### Query string
 
-Query string parameters can be specified by interpolating `query` function inside a segment string. The `query` function
+Query string parameters can be specified by adding `query` property to the route description. The `query` function
 expects an object where keys are names of parameters and values specify whether those params are required in the path.
 
-```js
-segment`/product${query({
-    productId: true,
-    details: false,
-})}`;
+```ts
+{
+    ...segment`/product`,
+    query: {
+        productId: query("required"),
+        details: query("optional")
+    }
+}
 ```
 
 The above segment defines a path which expects the `productId` URL param and the optional `details` URL param.
 
 When creating a route query strings can be passed in the second argument:
 
-```js
+```ts
 routes.products(
     {},
     {
@@ -118,11 +127,58 @@ routes.products(
 
 which will return `/product?details=false&productId=10`.
 
+`qs` by default supports also objects and arrays when stringifying and parsing query string.
+
+```ts
+const parameters = routes.products.parseQuery(queryString)
+
+// this will yield given parameters with given type
+
+type Parameters = {
+    productId: string | string[],
+    details?: string | string[],
+}
+```
+
+For objects you need to specify your value type when defining routes:
+
+```ts
+import { createRouting, number, query, uuid } from 'ts-routes';
+
+type ProductDetails = { name: string, price: string };
+
+const routes = createRouting({
+    products: {
+        ...segment`/product`,
+        query: {
+            productId: query("required"),
+            details: query<ProductDetails, "optional">("optional")
+        }
+    }
+});
+
+const parameters = routes.products.parseQuery(queryString)
+
+// which will yield
+
+type Parameters = {
+    productId: string | string[],
+    details?: ProductDetails | ProductDetails[],
+}
+```
+
+Additionaly you can override `qs` stringify and parse option directly on each route:
+```ts
+    routes.products(undefined, { productId: "10" }, overrideStringifyOptions);
+
+    routes.products.parse(queryString, overrideParseOptions);
+```
+
 ### Nested routes
 
 Routes can be nested by providing an optional `children` property to segments:
 
-```js
+```ts
 const routes = createRouting({
     parent: {
         ...segment`/parent`,
@@ -156,7 +212,7 @@ Those patterns are useful for integration with routing libraries which support
 
 You can use patterns for defining routes:
 
-```jsx
+```tsx
 <Route exact component={ProductsPage} path={routes.products.pattern} />
 ```
 
@@ -165,9 +221,9 @@ With React it's also useful to add some helper types which can be used for typin
 ```ts
 import { FunctionComponent } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { RouteParamsFor } from "ts-routes";
+import { PathParamsFor } from "ts-routes";
 
-type PageProps<TPathParams extends (...args: any[]) => string> = RouteComponentProps<RouteParamsFor<TPathParams>>;
+type PageProps<TPathParams extends (...args: any[]) => string> = RouteComponentProps<PathParamsFor<TPathParams>>;
 
 type PageComponent<TPathParams extends (...args: any[]) => string> = FunctionComponent<PageProps<TPathParams>>;
 ```
@@ -184,30 +240,11 @@ const ProductPage: PageComponent<typeof routes.products> = ({
 }) => <div>{productId}</div>;
 ```
 
-And for query string params:
-
-```ts
-import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
-import { QueryParamsFor } from "ts-routes";
-
-function useQueryParams() {
-    const location = useLocation();
-    return useMemo(() => new URLSearchParams(location.search), [location.search]);
-}
-
-function useQueryParamsGuarded<T extends (...args: any) => any>() {
-    return useQueryParams() as URLSearchParams & { get(name: keyof NonNullable<QueryParamsFor<T>>): string | null };
-}
-
-const redirectUrl = useQueryParamsGuarded<typeof routes.login>().get("redirect");
-```
-
 ### Vue Router
 
 You can use patterns for defining routes:
 
-```js
+```ts
 const router = new VueRouter({
     routes: [
         {
