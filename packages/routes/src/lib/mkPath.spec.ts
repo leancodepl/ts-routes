@@ -2,7 +2,14 @@ import { mkPath } from "./mkPath";
 
 const routes = [
     { name: "home", path: "" },
-    { name: "profile", path: "profile/" },
+    {
+        name: "profile",
+        path: "profile/",
+        children: [
+            { name: "profile", path: ":profileId" },
+            { name: "edit", path: ":profileId/edit" },
+        ],
+    },
     {
         name: "settings",
         path: "settings/",
@@ -30,6 +37,14 @@ describe("mkPath", () => {
 
     it("should generate index path for nested routes", () => {
         expect(path("settings", "index")).toBe("/settings/");
+    });
+
+    it("should generate path with params", () => {
+        expect(path("profile", "profile", { profileId: "123" })).toBe("/profile/123");
+    });
+
+    it("should generate path with params in the middle of path", () => {
+        expect(path("profile", "edit", { profileId: "123" })).toBe("/profile/123/edit");
     });
 
     it("should generate nested paths", () => {
