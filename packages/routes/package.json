@@ -1,6 +1,6 @@
 {
   "name": "@leancodepl/ts-routes",
-  "version": "0.0.1",
+  "version": "3.0.0",
   "devDependencies": {
     "react-router": "^6.15.0"
   },
