@@ -25,7 +25,9 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nx/typescript"],
-      "rules": {}
+      "rules": {
+        "import/prefer-default-export": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

@@ -40,7 +40,7 @@ type Routes<TRoutes, TPrefix extends string[] = [], TParams extends string = nev
 
 type RouteElement = { name: string; path: string; children?: readonly RouteElement[] };
 
-function mkPath<InternalRoutes extends ReadonlyArray<RouteElement>>(internalRoutes: InternalRoutes) {
+export function mkPath<InternalRoutes extends ReadonlyArray<RouteElement>>(internalRoutes: InternalRoutes) {
     return function path(...path: Routes<InternalRoutes>) {
         function pathRec(
             aggregatedPath = "/",
@@ -69,5 +69,3 @@ function mkPath<InternalRoutes extends ReadonlyArray<RouteElement>>(internalRout
         return pathRec();
     };
 }
-
-export default mkPath;

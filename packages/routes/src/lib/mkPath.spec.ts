@@ -1,4 +1,4 @@
-import mkPath from "./mkPath";
+import { mkPath } from "./mkPath";
 
 const routes = [
     { name: "home", path: "" },
