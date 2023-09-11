@@ -1,0 +1,13 @@
+{
+  "name": "@leancodepl/ts-routes",
+  "version": "0.0.1",
+  "devDependencies": {
+    "react-router": "^6.15.0"
+  },
+  "type": "commonjs",
+  "main": "./index.cjs",
+  "module": "./index.js",
+  "dependencies": {
+    "react-router": "6.15.0"
+  }
+}
