@@ -4,6 +4,8 @@
   "type": "commonjs",
   "main": "./index.cjs",
   "module": "./index.js",
+  "author": "LeanCode",
+  "license": "Apache-2.0",
   "dependencies": {
     "react-router": "^6.15.0"
   }
