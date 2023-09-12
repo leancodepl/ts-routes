@@ -119,3 +119,10 @@ A single route element that defines:
 -   `name` - The name of the route.
 -   `path` - The path associated with the route. Can contain variables like `:userId`.
 -   `children` (optional) - An array of child routes.
+
+## Compatibility
+
+**Important:** The current version (v3) of `ts-routes` is only compatible with `react-router v6`.
+
+For compatibility with older versions of `react-router`, you can use `ts-routes v2`.
+[Find v2 documentation here](https://github.com/leancodepl/ts-routes/tree/ts-routes-v1#readme).
