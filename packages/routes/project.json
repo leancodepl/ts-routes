@@ -18,7 +18,7 @@
       }
     },
     "publish": {
-      "command": "node tools/scripts/publish.mjs routes {args.ver} {args.tag}",
+      "command": "node tools/scripts/publish.mjs routes {args.registry} {args.ver} {args.tag}",
       "dependsOn": ["build"]
     },
     "lint": {
