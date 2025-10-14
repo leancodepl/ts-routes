@@ -1,0 +1,30 @@
+name: Build & Test
+
+on:
+    pull_request:
+
+jobs:
+    ci:
+        name: Build & Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "npm"
+                  registry-url: "https://registry.npmjs.org"
+            - name: Install
+              run: npm install
+            - name: Test
+              run:
+                  npx nx affected:test --parallel=3 --base=${{ github.event.pull_request.base.sha }} --head=${{
+                  github.event.pull_request.head.sha }}
+            - name: Build
+              run:
+                  npx nx affected:build --parallel=3 --base=${{ github.event.pull_request.base.sha }} --head=${{
+                  github.event.pull_request.head.sha  }}

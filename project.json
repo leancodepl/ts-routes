@@ -1,0 +1,17 @@
+{
+  "name": "ts-routes",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "local-registry": {
+      "executor": "@nx/js:verdaccio",
+      "options": {
+        "port": 4873,
+        "config": ".verdaccio/config.yml",
+        "storage": "tmp/local-registry/storage"
+      }
+    },
+    "local-publish": {
+      "command": "npx nx run-many -t publish --registry=http://localhost:4873/ --ver={args.ver} --tag={args.tag}"
+    }
+  }
+}
