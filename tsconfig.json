@@ -8,7 +8,8 @@
     "declaration": true,
     "strict": true,
     "rootDir": "src",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

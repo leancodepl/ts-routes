@@ -1,4 +1,5 @@
 import { createRouting, segment, uuid } from "../../src";
+import { describe, it, expect } from "@jest/globals";
 
 describe("uuid segment", () => {
     const testUuid = "3d368832-0bc0-4fcc-bf75-5bd8794c1ad3";

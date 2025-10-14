@@ -1,5 +1,6 @@
 import { URLSearchParams } from "url";
 import { createRouting, number, query, segment } from "../src";
+import { describe, it, expect } from "@jest/globals";
 
 describe("query", () => {
     it("creates route with an optional query param", () => {

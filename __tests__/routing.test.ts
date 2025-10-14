@@ -1,4 +1,5 @@
 import { createRouting, number, segment } from "../src/index";
+import { describe, it, expect } from "@jest/globals";
 
 describe("createRouting", () => {
     it("creates a simple route", () => {
