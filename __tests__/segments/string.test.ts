@@ -1,44 +1,44 @@
-import { string, createRouting, segment } from "../../src";
-import { describe, it, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals"
+import { createRouting, segment, string } from "../../src"
 
 describe("arg segment", () => {
-    it("creates route with an arg segment", () => {
-        const routes = createRouting({
-            product: segment`/product/${string("productId")}`,
-        } as const);
+  it("creates route with an arg segment", () => {
+    const routes = createRouting({
+      product: segment`/product/${string("productId")}`,
+    } as const)
 
-        const route = routes.product({ productId: "id" });
+    const route = routes.product({ productId: "id" })
 
-        expect(route).toEqual("/product/id");
-    });
+    expect(route).toEqual("/product/id")
+  })
 
-    it("creates route with an optional arg segment", () => {
-        const routes = createRouting({
-            product: segment`/product/${string("productId", "optional")}`,
-        } as const);
+  it("creates route with an optional arg segment", () => {
+    const routes = createRouting({
+      product: segment`/product/${string("productId", "optional")}`,
+    } as const)
 
-        const route = routes.product();
+    const route = routes.product()
 
-        expect(route).toEqual("/product");
-    });
+    expect(route).toEqual("/product")
+  })
 
-    it("returns the correct path pattern when required", () => {
-        const routes = createRouting({
-            product: segment`/product/${string("productId")}`,
-        } as const);
+  it("returns the correct path pattern when required", () => {
+    const routes = createRouting({
+      product: segment`/product/${string("productId")}`,
+    } as const)
 
-        const pattern = routes.product.pattern;
+    const pattern = routes.product.pattern
 
-        expect(pattern).toEqual("/product/:productId");
-    });
+    expect(pattern).toEqual("/product/:productId")
+  })
 
-    it("returns the correct path pattern when optional", () => {
-        const routes = createRouting({
-            product: segment`/product/${string("productId", "optional")}`,
-        } as const);
+  it("returns the correct path pattern when optional", () => {
+    const routes = createRouting({
+      product: segment`/product/${string("productId", "optional")}`,
+    } as const)
 
-        const pattern = routes.product.pattern;
+    const pattern = routes.product.pattern
 
-        expect(pattern).toEqual("/product/:productId?");
-    });
-});
+    expect(pattern).toEqual("/product/:productId?")
+  })
+})

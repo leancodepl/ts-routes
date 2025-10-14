@@ -1,69 +1,69 @@
-import { createRouting, number, query, segment } from "../../lib/index";
-import { expectError, expectType } from "tsd";
+import { expectError, expectType } from "tsd"
+import { createRouting, number, query, segment } from "../../lib"
 
 const routes = createRouting({
-    login: segment`/login`,
-    user: segment`/users/${number("userId")}`,
-    products: {
-        ...segment`/products`,
-        query: {
-            filter: query("required"),
-            optionalFilter: query("optional"),
-            object: query<{ test: string }, "optional">("optional"),
-        },
-        children: {
-            product: segment`/${number("productId")}`,
-        },
+  login: segment`/login`,
+  user: segment`/users/${number("userId")}`,
+  products: {
+    ...segment`/products`,
+    query: {
+      filter: query("required"),
+      optionalFilter: query("optional"),
+      object: query<{ test: string }, "optional">("optional"),
     },
-    order: segment`/orders/${number("orderId", "optional")}`,
-});
+    children: {
+      product: segment`/${number("productId")}`,
+    },
+  },
+  order: segment`/orders/${number("orderId", "optional")}`,
+})
 
 // Should not allow creating routing from raw strings
-expectError(createRouting({ login: "/login" }));
+expectError(createRouting({ login: "/login" }))
 
 // Passes without arguments when there are no required parameters or query parameters
-expectType<string>(routes.login());
+expectType<string>(routes.login())
 
 // Passes when the required param is specified
-expectType<string>(routes.user({ userId: "12" }));
+expectType<string>(routes.user({ userId: "12" }))
 
 // Expects the required param to be passed
-expectError(routes.user());
-expectError(routes.user({}));
+expectError(routes.user())
+expectError(routes.user({}))
 
 // Does not allow other params than the productId
-expectError(routes.user({ otherId: "12" }));
+expectError(routes.user({ otherId: "12" }))
 
 // Does not allow any extra params that are not defined
-expectError(routes.user({ userId: "12", otherId: "12" }));
+expectError(routes.user({ userId: "12", otherId: "12" }))
 
 // Passes when only required query params are specified
-expectType<string>(routes.products({}, { filter: "some" }));
+expectType<string>(routes.products({}, { filter: "some" }))
 
 // Passes with both required and optional query params specified
-expectType<string>(routes.products({}, { filter: "some", optionalFilter: "2" }));
+expectType<string>(routes.products({}, { filter: "some", optionalFilter: "2" }))
 
 // Expects the required query param to be passed
-expectError(routes.products({}, {}));
+expectError(routes.products({}, {}))
 
 // Does not allow undefined query params
-expectError(routes.products({}, { filter: "some", a: "a" }));
+expectError(routes.products({}, { filter: "some", a: "a" }))
 
 // Passes when all required params from parent routes are specified
-expectType<string>(routes.products.product({ productId: "12" }, { filter: "a" }));
+expectType<string>(routes.products.product({ productId: "12" }, { filter: "a" }))
 
 // Expects parent query params in child routes
-expectError(routes.products.product({ productId: "12" }));
+expectError(routes.products.product({ productId: "12" }))
 
 // Passes when optional route params are not specified
-expectType<string>(routes.order());
-expectType<string>(routes.order({}));
+expectType<string>(routes.order())
+expectType<string>(routes.order({}))
 
 // Allow passing array as query values
-expectType<string>(routes.products(undefined, { filter: ["some", "another"] }));
+expectType<string>(routes.products(undefined, { filter: ["some", "another"] }))
 
 // Does not allow invalid type of query parameter
-expectError(routes.products(undefined, { object: "abc" }));
+expectError(routes.products(undefined, { object: "abc" }))
 
 // Allow object for object type of query parameter
-expectType<string>(routes.products(undefined, { filter: "some", object: { test: "test" } }));
+expectType<string>(routes.products(undefined, { filter: "some", object: { test: "test" } }))
