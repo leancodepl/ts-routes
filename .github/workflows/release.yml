@@ -1,0 +1,50 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        type: choice
+        description: Choose release tag
+        options:
+          - alpha
+          - latest
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Get the version
+        id: get_version
+        run: echo "version=$(jq -Mr '.version' < package.json)" >> $GITHUB_OUTPUT
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+      # Ensure npm 11.5.1 or later is installed for OIDC to work.
+      - name: Update npm
+        run: npm install -g npm@latest
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Run tests
+        run: npm test
+      - name: Test types
+        run: npm run test:types
+      - name: Build
+        run: npm run build
+      - name: Publish
+        run: npm publish --registry=https://registry.npmjs.org --tag=${{github.event.inputs.release_tag}}
